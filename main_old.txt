@@ -1,0 +1,401 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\usepackage{circuitikz}
+\usepackage{amsmath}
+\usepackage{cite}
+% \usepackage[labelfont=it,textfont={bf,it}]{caption}
+\graphicspath{ {./images/} }
+\usepackage[left=2.54cm,right=2.54cm,top=2.54cm,bottom=2.54cm]{geometry}
+
+\date{\today}
+\title{Design of Passive Networks with Full-Wave Component Models}
+\author{Eric Valentino}
+\hypersetup{
+ pdfauthor={},
+ pdftitle={},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 26.1 (Org mode 9.1.14)}, 
+ pdflang={English}}
+
+\begin{document}
+
+
+\begin{center}
+\begin{Large}
+The Design of Passive Networks with Full-Wave Component Models
+\break
+\break
+by
+\break
+\break
+Eric Valentino
+\break\break
+
+
+A thesis submitted in partial fulfillment of the requirements for the degree of Master of Engineering in Electrical Engineering 
+
+Department of Electrical Engineering
+
+College of Engineering
+
+University of South Florida
+\break\break
+
+
+
+\end{Large}
+\end{center}
+
+\pagebreak
+
+\pagebreak
+\setcounter{tocdepth}{4}
+\tableofcontents
+\pagebreak
+
+\pagebreak
+
+\section{Abstract}
+\label{sec:orgd34c2b0}
+blah blah blah
+
+
+\section{Introduction f=2.45 GHz}
+\label{sec:org9651ef9}
+
+\section{Full-Wave Models for Passive Components and Antennas}
+\label{sec:org0788e1b}
+  As RF designs move to higher frequencies and designs become smaller,
+designers are increasingly moving to full-wave simulators such as
+ANSYS HFSS in order simulate their designs. Both planar and full-wave
+electromagnetic simulations are popular among those designing
+distributed microwave networks [cite], but as of today, full-wave
+simulation for lumped passive components is yet to be widely adopted.
+Full-wave simulations have been used historically to inform circuit models
+as in \cite{6f867bceb88343ec822a0e4fdd6d6d63}, but the roadblocks of computing power and protection of intellectual property kept them from being widely adopted for design work. 
+
+%https://www.ansys.com/-/media/ansys/corporate/resourcelibrary/techbrief/ab-ansys-hfss-3d-data-sheet.pdf
+Recently, however, the release of HFSS R16 introduced a system which allows an HFSS design to be modularized into a "3-D Component", encapsulating a sub-design's geometry and material information, meshing operations, and variables. 
+Furthermore, with version R17 came the ability to encrypt these parts, which allows 3-D components to simulate accurately while hiding their internal geometry and material properties from the user.  \cite{HFSS_3d_components}
+With this development, manufacturers and modeling services now have a viable way to distribute  full-wave component models without revealing the intellectual property of the manufacturers.  
+
+Given this, companies Johanson Technology, Inc. and Modelithics, Inc. have been released full-wave models of commercially available electrical components intended for direct use by the designer.  
+With versions of HFSS 18.3 or later, a component palette of various Johanson chip antennas is included which the designer may drop into their design in order to evaluate the gain, efficiency and match of an antenna design entirely with simulation.  
+Modelithics offers an initial sampling of packages, inductors and capacitors that would allow the designer to predict the effects of unusual configurations or interaction between components on any microwave design, as demonstrated in \cite{mdlx_3d_models}. 
+Though the effects of interactions can be a second thought to many microwave designers, they can can have a very significant effect on the response of compact filters, matching networks and other designs involving passives.  
+Below, Figure 7 and 8 of \cite{mdlx_3d_models} are shown, in which the measured response of 3 closely-spaced 1.6nH coilcraft 0603CS inductors is compared both to a circuit simulation using Modelithics' equivalent circuit model of the part, as well as the newly made HFSS model of the same.
+
+
+\includegraphics[width=\textwidth]{mdlx3d_comps_paper_fig_7}
+\caption{Figure 7 of \cite{mdlx_3d_models}: Coupling example with three shunt 1.6nH coilcraft 0603CS inductors placed on a 50 Ohm transmission line on 16mil rogers 4003C. Spacing between inductors was varied.}
+
+\includegraphics[width=\textwidth]{mdlx_3d_comps_paper_fig_8}
+\caption{Figure 8 of \cite{mdlx_3d_models}: Legend for inductor spacings: Red - 10 mils, blue - 42 mils, green - 74 mils.}
+
+
+At the closest spacing, the circuit model predicts the self resonance of the part to be about 2 GHz less than it actually occurs, whereas the 3-D component model is less than 500 MHz off.  
+The ability to trust your models in such extreme configurations as these allows the microwave designer to attain the maximum performance of their parts, and precludes costly and time consuming revisions.  
+
+Though there are many cases where properly made circuit models are more appropriate than 3-D models \cite{ltcc_filter}, there are cases in high-performance designs where the accuracy of 3-D models.  
+The two most common of these being predicting interactions between components, and predicting performance in unusual part configurations. 
+
+\subsection{Predicting Inter-Component Coupling}
+\label{sec:orgb79655d}
+
+\subsection{Versitility in Unusual Configurations}
+\label{sec:orge05ecd7}
+    Another limitation of equivalent circuit models is the fact that
+they are usually developed on a specific medium (such as microstrip,
+GCPW, etc.), and that the values of the parasitics in a component's
+equivalent circuit model are dependent on the the medium it was
+developed in. Grounded Co-planar Waveguide has seen an increase in use for
+applications in the tens of GHz given the fact that it operates
+quasi-TEM up to higher frequencies than microstrip as shown in Figure
+2 of ~\cite{coonrod2012comparing}. A geometric model used in conjunction
+with a full-wave electromagnetics simulator can give the engineer
+confidence that the component will act as predicted independent of medium.
+
+   Similarly, researchers in the field of antenna design have also
+encountered the fact that a capacitor may not perform at the nominal
+capacitance if it is not in a traditional microstrip configuration. In
+~\cite{mumcuCapacitors}, Figure 5b and 3b, measured data shows a 50 MHz shift
+downward in frequency which is in part attributable to the fact that
+an ideal, nominally-valued capacitor was used, with no modeling of the
+real component's interaction with the surrounding environment.
+
+\subsubsection{Full-Wave v.s. Equivalent Circuit Model Simulation
+Example:}
+
+
+ The parasitic which has a value most sensitive to medium is the
+termination to ground capacitance, as is demonstrated by the circuit
+and full wave simulations below.
+
+ Pictured below are two full-wave models of a 1 pF Johanson R05L
+capacitor, one mounted on a \(50 \Omega\) microstrip transmission line,
+[substrate dims here], the other mounted on a \(50 \Omega\) GCPW line.
+Both transmission lines are simulated on 30 mil Rogers 4350B, and use
+wave ports The E field vector at f = 3 GHz is plotted for each of the
+capacitors at the plane midway through their terminations. Wave ports
+were used at both ends of both simulated test fixtures, Notice the fact that more of the E field lies within the
+dielectric material of the substrate for co-planar waveguide as it has
+two ground planes directly adjacent to the termination of the device.
+
+[picture of e field for gcpw and microstrip]
+
+\(S_{21}\) of both capacitors for f = 1 to 5 GHz is plotted below. 
+
+  We can now fit the response of these capacitors to a Modelithics
+equvalent circuit model in the "simplified parasitic model" mode,
+along with termination-to-ground capacitance on each termination, as
+well as termination-to-termination capacitance. 
+the "simplified parasitic model" mode is a mode in which all of the parasitic effects associated with
+the terminations of the device are removed, leaving behind effects
+relegated to the "inside" of the component, such as effective series
+resisitance, effective capacitance, and effective series inductance.
+
+
+
+\section{An Investigation into Inter-Component Coupling}
+\label{sec:org9345255}
+ Inter-component coupling is present to some degree in circuits at all
+frequencies, and is widely understood in a conceptual sense. This kind
+of coupling is the added response caused by putting two or more
+components together, that would not be present when the components are
+on their own. Physically, this corresponds to the mutual capacitance
+or inductance between the outer parts of two components.
+
+    It is intuitive that these effects are more pronounced when
+components are closer together, but the effect of other factors such
+as the board height, relative rotation of components, and whether the
+interconnects are microstrip or GCPW, has not been systematically
+studied in the literature. A factorial ANOVA based experiment is
+detailed below.
+
+\subsection{A Rigourous Definition of Inter-Component Coupling}
+\label{sec:org0d893c1}
+   If coupling is to be studied in an experiment, we must first have a
+measurement-based mathematical formulation of coupling. The following
+section shows the metric coupling will be measured in this study.
+\subsubsection{Wave Cascade Matrices}
+\label{sec:org2b8ea1d}
+    All microwave engineers familiar with S parameters, which are
+commonly collected into a matrix in the case of two-port networks. The
+S matrix relates the incident (or \(a\)) waves to the reflected (or \(b\))
+waves like so:
+\begin{gather}
+ \begin{bmatrix} b_1 \\ b_2 \end{bmatrix}
+ =
+  \bar S 
+  \begin{bmatrix} a_1 \\ a_2  \end{bmatrix}
+\end{gather}
+
+    Less widely used, but very convenient for finding the response of
+two-port microwave networks is the wave cascade matrix corresponding
+to an arbitrary two port, \(\bar W\) ,which relates the incident and
+reflected waves like so:
+
+\begin{gather}
+ \begin{bmatrix} b_1 \\ a_1 \end{bmatrix}
+ =
+  \bar W 
+  \begin{bmatrix} a_2 \\ b_2  \end{bmatrix}
+\end{gather}
+
+   From this we see that the wave cascade matrix of two two-port
+networks cascaded is \(\bar W_1 \bar W_2\) , where \(\bar W_1 ,\bar W_2\)
+are the wave cascade matrices of arbitrary two ports 1 and 2.
+
+\subsubsection{Coupling Metric}
+\label{sec:orgc05ec0c}
+Consider a design composed of \(k\) two-port networks in series as shown
+below:
+
+  If \(i\) is the variable which indexes these cascaded two-port
+networks, we define that the \(i^{th}\) two-port has wave cascade matrix
+\(\bar W_i\), and the wave cascade matrix of the entire section is \(\bar
+W_{tot}\). Both \(\bar W_i\) and \(\bar W_{tot}\) will have to be directly
+measured in order to find coupling by this metric. Since the
+measurement of \(\bar W_{tot}\) will have all of the sub-designs
+directly cascaded, there will be some amount of coupling between the
+components. So, we can define coupling of a specific ordered set of
+two-port designs to be:
+
+$$Coupling = \sum_{elements} ( \bar W_{tot} - \prod_{i=1}^k \bar W_i
+)$$
+
+\subsection{Factorial DOE}
+\label{sec:orgd5ae759}
+
+A full-factorial
+\subsubsection{Treatments}
+\label{sec:orgcd1d40b}
+\begin{center}
+\begin{tabular}{llll}
+Treatment & Values &  & \\
+\hline
+Component Type & Capacitor & Inductor & \\
+Component Size & 0402 & 0201 & \\
+Distance & .6 mm & 1.2 mm & 1.8 mm\\
+Angle & 0° & 45° & 90°\\
+ &  &  & \\
+\end{tabular}
+\end{center}
+
+
+$$Coupling = \max{i,j} (10 log_{10}|S_{ij,phy}-S_{ij,sim}|) $$
+
+
+
+\section{Benchmark: Traditional Distributed Quadrature Hybrid?}
+\label{sec:orge065df9}
+\subsection{Design of Traditional Distributed Quadrature Coupler}
+\label{sec:org0ae73de}
+To serve as a reference point for the designs to follow,
+\subsubsection{Simulation}
+\label{sec:orgba8fbee}
+\subsubsection{Measurement}
+\label{sec:org8f117ba}
+
+\section{Design of 7-Element Quadrature Coupler}
+\label{sec:org87715f0}
+  A principal component of many microwave designs is the coupler. As
+the allotment of physical space for microwave designs decreases,
+distributed implementations of quadrature couplers become less
+attractive to the designer. However, for some designs, the use of a
+MMIC process to provide the best miniaturization is unavailable. This
+leaves the discrete component lumped-element quadrature coupler as a
+good solution for designs which are to be produced in small quantity,
+with relatively quick and inexpensive design iterations. A similar
+coupler to the one proposed is shown in [dunleavy+ashok white paper],
+which demonstrates the concept in a microstrip implementation. In the
+interest of making the smallest design possible, this coupler will be
+implemented using the Grounded Coplanar Waveguide (GCPW) medium, and
+using 0402 package size components. The topology of the coupler is
+shown below:
+
+\begin{center}
+  \begin{circuitikz}
+  \draw
+  (0,0) to [short,o-*] (2,0) to [L,l_=$L$] (7,0) to[short,*-o] (9,0)
+  (2,0) to[C,l_=$C$] (2,3) (7,0) to [C,l_=$C$] (7,3)
+  (2,3) to[L,l_=$L$] (7,3)
+  (2,3) to[C,l_=$C$] (2,6) (7,3) to [C,l_=$C$] (7,6)
+  (0,6) to [short,o-*] (2,6) to [L,l_=$L$] (7,6) to[short,*-o] (9,6)
+  ; 
+  \end{circuitikz}
+\end{center}
+
+\subsection{Analysis}
+\label{sec:org07519ea}
+   As shown in [3], the topology of this coupler can be understood
+with an even and odd mode analysis, in which the values of inductance
+and capacitance in the coupler are taken to be
+
+$$ L = \frac{Z_0}{\omega}, \qquad \qquad C = \frac1{Z_0 \omega} $$
+
+Given our design frequency of 2.45 GHz, and a system \(Z_0\) of 50
+\(\Omega\), we find that the necessary L and C needed for our coupler
+is:
+
+$$ L = \frac{50}{2\pi\cdot2.45E9} = \boxed{3.248E-9}, \qquad \qquad C
+= \frac1{50\cdot2\pi\cdot2.45E9} = \boxed{1.299E-12}$$
+
+\subsection{AWR Simulation}
+\label{sec:orge682645}
+\subsubsection{Ideal Circuit}
+\label{sec:orgb17be8f}
+
+
+\subsubsection{Parasitic Effects and GCPW Interconnects}
+\label{sec:orge93be39}
+\subsection{HFSS Simulation}
+\label{sec:org6703f31}
+\subsubsection{Simple Lumped-Element Model}
+\label{sec:org7a5b536}
+\subsubsection{Complete Lumped-Element Model}
+\label{sec:orgafdc66f}
+\subsection{Measurement}
+\label{sec:orgeec3857}
+\subsection{Comparison}
+\label{sec:org961deaf}
+
+\section{Reconfiguring of Johanson 2450AT18A100 Layout as Edge-Mount}
+\label{sec:orgf1ac837}
+\subsection{HFSS Simulation Using Johanson Antenna Model}
+\label{sec:org8378dc4}
+\subsection{Measurement}
+\label{sec:org8ffbb6b}
+
+\section{Crossover Design?}
+\label{sec:org2c87497}
+\subsection{HFSS Simulation}
+\label{sec:org13ac34e}
+\subsection{Measurement}
+\label{sec:org95aea90}
+
+\section{Phase Shifter Design}
+\label{sec:orge04b59d}
+  Another ubiquitious and simple passive microwave building block is
+the phase shifter. One realization of a compact, lumped element phase
+shifter is a low-pass-equivalent tee network, consisting of two series
+capacitors and one shunt inductor, was manufactured and simulated.
+\subsection{Design:}
+\label{sec:orgde829bd}
+   A 4-port Butler matrix employs two 45 degree phase shifters in
+order to provide the correct progressive phase shift through the four
+elements. The aformentioned network is shown below:
+
+\#+CAPTION 3 element tee phase shifter topology
+\begin{center}
+  \begin{circuitikz}
+  \draw
+  (0,3) to [short,-o] (0,3)
+  (0,3) to [C,l_=$C$] (3,3)
+  (3,3) to [C,l_=$C$] (6,3)
+  (3,3) to [L,l_=$L$] (3,1)
+  (3,1) to [short] node[ground] {} (3,1)
+  ; 
+  \end{circuitikz}
+\end{center}
+
+Design equations exist for the values of L and C given a desired phase
+shift \(\phi\), namely:
+
+$$ L = \frac{Z_0}{\omega sin(\phi)}, \qquad C =
+\frac{sin(\phi)}{\omega Z_0 (1- cos(\phi))} $$
+
+Given our design frequency of 2.45 GHz and our design meter \(\phi\)
+
+\section{Compact 2.45 GHZ Lumped-Element Butler Matrix}
+\label{sec:orga8b6ac1}
+\subsection{HFSS Simulation}
+\label{sec:org38a6d57}
+\subsection{Measurement}
+\label{sec:org4e18fc0}
+
+\section{Conclusion}
+\label{sec:org25baf6f}
+
+
+\section{References}
+\label{sec:org6347259}
+
+Blablabla said Nobody ~\cite{mumcuCapacitors}.
+
+\bibliography{thesis}{}
+\bibliographystyle{plain}
+\end{document}
